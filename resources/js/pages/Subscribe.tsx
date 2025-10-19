@@ -7,7 +7,7 @@ const Subscribe = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (subscribe) {
             setShowSuccess(true);
         } else {
@@ -33,14 +33,14 @@ const Subscribe = () => {
                                         <h4>Thank you for subscribing!</h4>
                                         <p>We will send updates to: {email}</p>
                                         <button onClick={resetForm} className="btn btn-secondary">
-                                            Back to form
+                                            Back form
                                         </button>
                                     </div>
                                 </div>
                             ) : (
                                 <form onSubmit={handleSubmit}>
                                     <div className="row mb-3 align-items-center">
-                                        <label htmlFor="email" className="col-sm-3 col-form-label">
+                                        <label htmlFor="email" className="col-sm-3 col-form-label fs-4">
                                             Email
                                         </label>
                                         <div className="col-sm-9">
@@ -68,9 +68,14 @@ const Subscribe = () => {
                                         </label>
                                     </div>
 
-                                    <button type="submit" className="btn btn-primary">
-                                        Send
-                                    </button>
+                                    <div className="d-flex gap-2 mt-3">
+                                        <button type="submit" className="btn btn-primary btn-lg">
+                                            Send
+                                        </button>
+                                        <a href="/" className="btn btn-outline-secondary btn-lg">
+                                            Back home
+                                        </a>
+                                    </div>
                                 </form>
                             )}
                         </div>
