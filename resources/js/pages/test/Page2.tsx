@@ -1,24 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from '@inertiajs/react';
 
 const TestPage2 = () => {
     const { data, setData, post, processing } = useForm({
-        answers: {
-            q1: '', q2: '', q3: '', q4: '', q5: '',
-            q6: '', q7: '', q8: '', q9: '', q10: ''
-        }
+        q1: '', q2: '', q3: '', q4: '', q5: '',
+        q6: '', q7: '', q8: '', q9: '', q10: ''
     });
+
+    const [showAlert, setShowAlert] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        const allAnswered = Object.values(data).every(answer => answer !== '');
+
+        if (!allAnswered) {
+            setShowAlert(true);
+            return;
+        }
+
+        setShowAlert(false);
         post('/test/page3');
     };
 
     const handleAnswerChange = (question: string, value: string) => {
-        setData('answers', {
-            ...data.answers,
-            [question]: value
-        });
+        setData(question as any, value);
+
+        if (showAlert) {
+            setShowAlert(false);
+        }
     };
 
     const questions = [
@@ -78,7 +88,7 @@ const TestPage2 = () => {
         <div className="container my-5">
             <div className="row justify-content-center">
                 <div className="col-md-10">
-                    <div className="card border">
+                    <div className="card border  border-primary">
                         <div className="card-body p-4">
                             <h2 className="text-center mb-4">Test. Page 2</h2>
                             <p className="text-muted text-center mb-4">Выберите один правильный ответ для каждого вопроса</p>
@@ -97,9 +107,8 @@ const TestPage2 = () => {
                                                                 type="radio"
                                                                 name={q.id}
                                                                 value={option.charAt(0)}
-                                                                checked={(data.answers as any)[q.id] === option.charAt(0)}
+                                                                checked={(data as any)[q.id] === option.charAt(0)}
                                                                 onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                                                                required
                                                             />
                                                             {option}
                                                         </div>
@@ -112,6 +121,11 @@ const TestPage2 = () => {
                                 ))}
 
                                 <div className="text-center mt-4">
+                                    {showAlert && (
+                                        <div className="alert alert-warning mb-3">
+                                            Please make all questions answered!
+                                        </div>
+                                    )}
                                     <button type="submit" className="btn btn-primary btn-lg" disabled={processing}>
                                         {processing ? 'Load...' : 'Next'}
                                     </button>
